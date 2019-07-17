@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.mymovie.MainActivity;
 import com.example.mymovie.R;
 import com.example.mymovie.adapter.MovieAdapter;
 import com.example.mymovie.adapter.MovieItemClickListener;
@@ -82,7 +83,18 @@ public class HomeFragement extends Fragment implements MovieItemClickListener {
 
     @Override
     public void onMovieClick(Movie movie, ImageView movieImageView) {
+            DetailFragment detailFragment = new DetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("title", movie.getTitle());
+            bundle.putInt("imgURL", movie.getThumbnail());
+            bundle.putInt("imgCover", movie.getCoverPhoto());
 
+            detailFragment.setArguments(bundle);
+
+           getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_content, detailFragment)
+                    .commit();
     }
 
     private class SliderTimer extends TimerTask {
