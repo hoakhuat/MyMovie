@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.mymovie.MainActivity;
+import com.example.mymovie.MovieDetailActivity;
 import com.example.mymovie.R;
 import com.example.mymovie.adapter.MovieAdapter;
 import com.example.mymovie.adapter.MovieItemClickListener;
@@ -83,18 +84,42 @@ public class HomeFragement extends Fragment implements MovieItemClickListener {
 
     @Override
     public void onMovieClick(Movie movie, ImageView movieImageView) {
-            DetailFragment detailFragment = new DetailFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("title", movie.getTitle());
-            bundle.putInt("imgURL", movie.getThumbnail());
-            bundle.putInt("imgCover", movie.getCoverPhoto());
+        //Move to Detail Fragment
 
-            detailFragment.setArguments(bundle);
+//            DetailFragment detailFragment = new DetailFragment();
+//            Bundle bundle = new Bundle();
+//            bundle.putString("title", movie.getTitle());
+//            bundle.putInt("imgURL", movie.getThumbnail());
+//            bundle.putInt("imgCover", movie.getCoverPhoto());
+//
+//            detailFragment.setArguments(bundle);
+//
+//           getActivity().getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .replace(R.id.fragment_content, detailFragment)
+//                    .commit();
 
-           getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_content, detailFragment)
-                    .commit();
+        
+        // here we send movie information to detail activity
+        // also we ll create the transition animation between the two activity
+
+        Intent intent = new Intent(getContext(), MovieDetailActivity.class);
+        // send movie information to deatilActivity
+        intent.putExtra("title",movie.getTitle());
+        intent.putExtra("imgURL",movie.getThumbnail());
+        intent.putExtra("imgCover",movie.getCoverPhoto());
+        // lets crezte the animation
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                movieImageView,"sharedName");
+
+        startActivity(intent,options.toBundle());
+
+
+
+        // i l make a simple test to see if the click works
+
+        Toast.makeText(getContext(),"item clicked : " + movie.getTitle(),Toast.LENGTH_LONG).show();
+        // it works great
     }
 
     private class SliderTimer extends TimerTask {
