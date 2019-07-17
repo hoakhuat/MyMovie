@@ -1,4 +1,4 @@
-package com.example.mymovie;
+package com.example.mymovie.model;
 
 public class Slide {
 
