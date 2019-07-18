@@ -1,4 +1,4 @@
-package com.example.mymovie.ui;
+package com.example.mymovie.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,11 +11,12 @@ import androidx.fragment.app.Fragment;
 
 import com.example.mymovie.R;
 
-public class SearchFragment extends Fragment {
+public class FavouriteFragment extends Fragment {
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search, null);
+        View view = inflater.inflate(R.layout.fragment_favourite,null);
         return view;
     }
 }

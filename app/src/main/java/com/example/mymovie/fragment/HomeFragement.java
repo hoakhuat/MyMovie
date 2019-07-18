@@ -1,4 +1,4 @@
-package com.example.mymovie.ui;
+package com.example.mymovie.fragment;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -16,8 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.mymovie.MainActivity;
-import com.example.mymovie.MovieDetailActivity;
+import com.example.mymovie.activity.MovieDetailActivity;
 import com.example.mymovie.R;
 import com.example.mymovie.adapter.MovieAdapter;
 import com.example.mymovie.adapter.MovieItemClickListener;

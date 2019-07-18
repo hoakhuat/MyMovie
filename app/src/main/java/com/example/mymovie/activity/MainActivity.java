@@ -1,4 +1,4 @@
-package com.example.mymovie;
+package com.example.mymovie.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,11 +8,12 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.mymovie.R;
 import com.example.mymovie.model.Slide;
-import com.example.mymovie.ui.AccountFragment;
-import com.example.mymovie.ui.FavouriteFragment;
-import com.example.mymovie.ui.HomeFragement;
-import com.example.mymovie.ui.SearchFragment;
+import com.example.mymovie.fragment.AccountFragment;
+import com.example.mymovie.fragment.FavouriteFragment;
+import com.example.mymovie.fragment.HomeFragement;
+import com.example.mymovie.fragment.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
