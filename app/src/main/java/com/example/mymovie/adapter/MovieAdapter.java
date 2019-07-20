@@ -1,6 +1,8 @@
 package com.example.mymovie.adapter;
 
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,21 +14,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.mymovie.R;
+import com.example.mymovie.activity.MovieDetailActivity;
 import com.example.mymovie.model.Movie;
+import com.example.mymovie.model.MovieResponse;
 
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder> {
     Context context ;
-    List<Movie> mData;
-    MovieItemClickListener listener;
+    List<MovieResponse> mData;
 
-    public MovieAdapter(Context context, List<Movie> mData, MovieItemClickListener listener) {
+    public MovieAdapter(Context context, List<MovieResponse> mData) {
         this.context = context;
         this.mData = mData;
-        this.listener = listener;
     }
+
 
     @NonNull
     @Override
@@ -37,8 +42,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.title.setText(mData.get(position).getTitle());
-        holder.image.setImageResource(mData.get(position).getThumbnail());
+        holder.title.setText(mData.get(position).getOriginal_title());
+        Glide.with(context)
+                .load(mData.get(position).getPoster_path())
+                .placeholder(R.drawable.ic_account_circle_black_24dp)
+                .into(holder.image);
+//        holder.image.setImageResource(mData.get(position).getBackdrop_path());
     }
 
     @Override
@@ -61,7 +70,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onMovieClick(mData.get(getAdapterPosition()),image);
+                    //listener.onMovieClick(mData.get(getAdapterPosition()),image);
+                    int pos = getAdapterPosition();
+                    if(pos!=RecyclerView.NO_POSITION){
+                        MovieResponse cliclekMovie = mData.get(pos);
+                        Intent intent = new Intent(context, MovieDetailActivity.class);
+                        // send movie information to deatilActivity
+                        intent.putExtra("title",mData.get(pos).getOriginal_title());
+                        intent.putExtra("poster_path",mData.get(pos).getPoster_path());
+                        intent.putExtra("overview",mData.get(pos).getOverview());
+                        intent.putExtra("vote_average",mData.get(pos).getVote_average());
+                        context.startActivity(intent);
+                    }
                 }
             });
 

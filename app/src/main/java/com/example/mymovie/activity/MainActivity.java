@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.mymovie.R;
+import com.example.mymovie.client.RetrofitClient;
 import com.example.mymovie.model.Slide;
 import com.example.mymovie.fragment.AccountFragment;
 import com.example.mymovie.fragment.FavouriteFragment;
 import com.example.mymovie.fragment.HomeFragement;
 import com.example.mymovie.fragment.SearchFragment;
+import com.example.mymovie.server.RetrofitService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
@@ -23,14 +25,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private BottomNavigationView navigationView;
     private List<Slide> slides ;
     private ViewPager slider;
+    private RetrofitService retrofitService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //find id
+        //find
         navigationView = findViewById(R.id.nav_bottom);
+//        retrofitService = RetrofitClient.getClient().create(RetrofitService.class);
 
 
         //set listener
