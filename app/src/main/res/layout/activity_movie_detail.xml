@@ -29,8 +29,10 @@
             android:src="@drawable/gradient_bg"
             app:layout_constraintBottom_toBottomOf="@+id/detail_movie_cover"
             app:layout_constraintEnd_toEndOf="@+id/detail_movie_cover"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/detail_movie_cover" />
+            app:layout_constraintTop_toTopOf="@+id/detail_movie_cover"
+            app:layout_constraintVertical_bias="0.7"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/play_fab"
@@ -42,6 +44,8 @@
             app:layout_constraintEnd_toEndOf="@+id/imageView"
             app:layout_constraintStart_toStartOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+
 
         <ImageView
             android:id="@+id/detail_movie_img"
@@ -61,15 +65,26 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:text="TextView"
             android:textColor="@android:color/white"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/detail_movie_img"
             app:layout_constraintTop_toBottomOf="@+id/detail_movie_cover" />
+
+        <com.github.ivbaranov.mfb.MaterialFavoriteButton
+            android:id="@+id/favorite_button"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="5dp"
+            app:mfb_color="white"
+            android:layout_alignParentRight="true"
+            app:layout_constraintTop_toBottomOf="@+id/detail_movie_title"
+            app:layout_constraintLeft_toRightOf="@+id/detail_movie_img"
+            app:mfb_type="heart"
+            android:background="@color/colorPrimary"/>
 
         <TextView
             android:id="@+id/detail_movie_desc"
@@ -80,10 +95,46 @@
             android:layout_marginEnd="16dp"
             android:lineSpacingExtra="8dp"
             android:textColor="@color/text_light_blue"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_movie_img" />
+
+        <TextView
+            android:id="@+id/textViewCast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/favorite_color"
+            android:text="Cast"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/text_light_white"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toTopOf="@+id/rv_movie2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_movie_desc" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_cast"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:scrollbars="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCast"/>
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

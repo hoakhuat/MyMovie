@@ -59,6 +59,7 @@ public class SliderPagerAdapter extends PagerAdapter {
                     MovieResponse cliclekMovie = mList.get(position);
                     Intent intent = new Intent(mContext, MovieDetailActivity.class);
                     // send movie information to deatilActivity
+                    intent.putExtra("movie_id",mList.get(position).getId());
                     intent.putExtra("title",mList.get(position).getOriginal_title());
                     intent.putExtra("poster_path",mList.get(position).getPoster_path());
                     intent.putExtra("overview",mList.get(position).getOverview());

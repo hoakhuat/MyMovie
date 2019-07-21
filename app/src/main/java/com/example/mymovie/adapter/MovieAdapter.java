@@ -70,6 +70,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
                         MovieResponse cliclekMovie = mData.get(pos);
                         Intent intent = new Intent(context, MovieDetailActivity.class);
                         // send movie information to deatilActivity
+                        intent.putExtra("movie_id",mData.get(pos).getId());
                         intent.putExtra("title",mData.get(pos).getOriginal_title());
                         intent.putExtra("poster_path",mData.get(pos).getPoster_path());
                         intent.putExtra("overview",mData.get(pos).getOverview());
