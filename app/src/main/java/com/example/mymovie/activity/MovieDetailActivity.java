@@ -19,6 +19,8 @@ import com.example.mymovie.model.MovieResponse;
 import com.example.mymovie.model.MoviesResponse;
 import com.example.mymovie.model.movie_cast.Cast;
 import com.example.mymovie.model.movie_cast.CastAndCrew;
+import com.example.mymovie.model.trailer.Trailer;
+import com.example.mymovie.model.trailer.TrailerResponse;
 import com.example.mymovie.server.RetrofitService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -40,7 +42,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private RetrofitService api;
     private String api_key = "dd104acf25822bb6442481f4cde05a64";
     private int movie_id;
-
+    private String movieTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,10 +61,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         iniview();
 
         loadCast();
+
     }
 
     private void iniview() {
-        String movieTitle = getIntent().getExtras().getString("title");
+        movieTitle = getIntent().getExtras().getString("title");
         String poster_path = getIntent().getExtras().getString("poster_path");
         String backdrop_path = getIntent().getExtras().getString("backdrop_path");
         String overview = getIntent().getExtras().getString("overview");
@@ -93,11 +96,30 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         play_fab.setAnimation(AnimationUtils.loadAnimation(this,R.anim.scale_animation));
 
+        //click to button play
         play_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MovieDetailActivity.this, VideoPlayerActivity.class);
+                loadVideoMovie();
+            }
+        });
+    }
+
+    private void loadVideoMovie(){
+        Call<TrailerResponse> call = api.getMovieTrailer(movie_id,api_key);
+        call.enqueue(new Callback<TrailerResponse>() {
+            @Override
+            public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
+                List<Trailer> trailer = response.body().getResults();
+                Intent intent = new Intent(MovieDetailActivity.this,VideoPlayerActivity.class);
+                intent.putExtra("movie_id",trailer.get(0).getKey());
+                intent.putExtra("title",movieTitle);
                 startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Call<TrailerResponse> call, Throwable t) {
+
             }
         });
     }

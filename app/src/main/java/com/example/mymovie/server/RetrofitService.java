@@ -3,6 +3,7 @@ package com.example.mymovie.server;
 import com.example.mymovie.model.MoviesResponse;
 import com.example.mymovie.model.PersonResponse;
 import com.example.mymovie.model.movie_cast.CastAndCrew;
+import com.example.mymovie.model.trailer.TrailerResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -34,5 +35,8 @@ public interface RetrofitService {
 
     @GET("movie/{movie_id}/credits")
     Call<CastAndCrew> getCastsByMovieId(@Path("movie_id") int id, @Query("api_key") String api_key);
+
+    @GET("movie/{movie_id}/videos")
+    Call<TrailerResponse> getMovieTrailer(@Path("movie_id") int id, @Query("api_key") String api_key);
 
 }
