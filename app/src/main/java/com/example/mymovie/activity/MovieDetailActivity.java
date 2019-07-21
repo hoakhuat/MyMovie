@@ -5,7 +5,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -15,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.mymovie.R;
 import com.example.mymovie.adapter.CastAdapter;
 import com.example.mymovie.adapter.MovieAdapter;
+import com.example.mymovie.data.FavoriteDbHelper;
 import com.example.mymovie.model.MovieResponse;
 import com.example.mymovie.model.MoviesResponse;
 import com.example.mymovie.model.movie_cast.Cast;
@@ -22,7 +25,9 @@ import com.example.mymovie.model.movie_cast.CastAndCrew;
 import com.example.mymovie.model.trailer.Trailer;
 import com.example.mymovie.model.trailer.TrailerResponse;
 import com.example.mymovie.server.RetrofitService;
+import com.github.ivbaranov.mfb.MaterialFavoriteButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,12 +48,20 @@ public class MovieDetailActivity extends AppCompatActivity {
     private String api_key = "dd104acf25822bb6442481f4cde05a64";
     private int movie_id;
     private String movieTitle;
+    private MaterialFavoriteButton favoriteButton;
+    private MovieResponse favorite;
+    private MovieResponse movie;
+    private FavoriteDbHelper favoriteDbHelper;
+    private String poster_path;
+    private String overview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
         play_fab = findViewById(R.id.play_fab);
         recyclerViewCast = findViewById(R.id.rv_cast);
+        favoriteButton = findViewById(R.id.favorite_button);
 
         //set up for get api
         Retrofit get_retrofit = new Retrofit.Builder()
@@ -62,13 +75,39 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         loadCast();
 
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//
+//        favoriteButton.setOnFavoriteChangeListener(new MaterialFavoriteButton.OnFavoriteChangeListener() {
+//            @Override
+//            public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorite) {
+//                if (favorite){
+//                    SharedPreferences.Editor editor = getSharedPreferences("com.example.mymovie.activity.MovieDetailActivity", MODE_PRIVATE).edit();
+//                    editor.putBoolean("Favorite Added", true);
+//                    editor.commit();
+//                    saveFavorite();
+//                    Snackbar.make(buttonView, "Added to Favorite",
+//                            Snackbar.LENGTH_SHORT).show();
+//                }else{
+//                    int movie_id = getIntent().getExtras().getInt("id");
+//                    favoriteDbHelper = new FavoriteDbHelper(MovieDetailActivity.this);
+//                    favoriteDbHelper.deleteFavorite(movie_id);
+//
+//                    SharedPreferences.Editor editor = getSharedPreferences("com.example.mymovie.activity.MovieDetailActivity", MODE_PRIVATE).edit();
+//                    editor.putBoolean("Favorite Removed", true);
+//                    editor.commit();
+//                    Snackbar.make(buttonView, "Removed from Favorite",
+//                            Snackbar.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+
     }
 
     private void iniview() {
         movieTitle = getIntent().getExtras().getString("title");
-        String poster_path = getIntent().getExtras().getString("poster_path");
+        poster_path = getIntent().getExtras().getString("poster_path");
         String backdrop_path = getIntent().getExtras().getString("backdrop_path");
-        String overview = getIntent().getExtras().getString("overview");
+        overview = getIntent().getExtras().getString("overview");
         movie_id = getIntent().getExtras().getInt("movie_id");
 
         //set name for action bar
@@ -150,4 +189,13 @@ public class MovieDetailActivity extends AppCompatActivity {
         recyclerView.smoothScrollToPosition(0);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
+
+//    public void saveFavorite(){
+//        favoriteDbHelper = new FavoriteDbHelper(MovieDetailActivity.this);
+//        favorite = new MovieResponse();
+//        favorite.setId(movie_id);
+//        favorite.setOriginal_title(movieTitle);
+//        favorite.setPoster_path(poster_path);
+//        favoriteDbHelper.addFavorite(favorite);
+//    }
 }
