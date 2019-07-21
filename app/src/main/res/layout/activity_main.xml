@@ -7,11 +7,19 @@
     android:background="@color/colorPrimary"
     tools:context=".activity.MainActivity">
 
-    <FrameLayout
-        android:id="@+id/fragment_content"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/nav_bottom"/>
+        android:layout_marginTop="0dp">
+
+        <FrameLayout
+            android:id="@+id/fragment_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/nav_bottom"/>
+    </androidx.core.widget.NestedScrollView>
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_bottom"
@@ -19,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_navigation"
-        android:background="@drawable/gradient_bg"
+        android:background="@color/colorPrimary"
         app:itemIconTint="@drawable/selector"/>
 
 </RelativeLayout>

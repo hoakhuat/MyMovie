@@ -3,29 +3,25 @@ package com.example.mymovie.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.mymovie.R;
-import com.example.mymovie.client.RetrofitClient;
-import com.example.mymovie.model.Slide;
-import com.example.mymovie.fragment.AccountFragment;
 import com.example.mymovie.fragment.FavouriteFragment;
 import com.example.mymovie.fragment.HomeFragement;
 import com.example.mymovie.fragment.SearchFragment;
-import com.example.mymovie.server.RetrofitService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView navigationView;
-    private List<Slide> slides ;
-    private ViewPager slider;
-    private RetrofitService retrofitService;
+    private Fragment homeFragment;
+    private Fragment searchFragment;
+    private Fragment favouriteFragment;
+    private Fragment accountFragment;
+    private Fragment activeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,43 +30,66 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         //find
         navigationView = findViewById(R.id.nav_bottom);
-//        retrofitService = RetrofitClient.getClient().create(RetrofitService.class);
+        navigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        homeFragment = new HomeFragement();
+        searchFragment = new SearchFragment();
+        favouriteFragment = new FavouriteFragment();
+        accountFragment = new FavouriteFragment();
+        activeFragment = homeFragment;
 
-        //set listener
-        navigationView.setOnNavigationItemSelectedListener(this);
-        loadFragment(new HomeFragement());
+        addFragment(accountFragment,"4");
+        addFragment(favouriteFragment,"3");
+        addFragment(searchFragment,"2");
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_content, homeFragment, "1")
+                .commit();
     }
 
-    public boolean loadFragment(Fragment fragment){
-        if(fragment!=null){
+    public void addFragment(Fragment fragment, String tag) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_content, fragment)
+                    .add(R.id.fragment_content, fragment, tag)
+                    .hide(fragment)
                     .commit();
-            return true;
-        }
-        return false;
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Fragment selectedFragment = null;
-            switch (menuItem.getItemId()){
-                case R.id.nav_home:
-                    selectedFragment = new HomeFragement();
-                    break;
-                case R.id.nav_search:
-                    selectedFragment = new SearchFragment();
-                    break;
-                case R.id.nav_favourite:
-                    selectedFragment = new FavouriteFragment();
-                    break;
-                case R.id.nav_account:
-                    selectedFragment = new AccountFragment();
-                    break;
-            }
-        return loadFragment(selectedFragment);
+    public void loadNavigationOnClick(Fragment fragment) {
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .hide(activeFragment)
+                    .show(fragment)
+                    .commit();
+
+            activeFragment = fragment;
+        }
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.nav_home:
+                    loadNavigationOnClick(homeFragment);
+                    return true;
+                case R.id.nav_search:
+                    loadNavigationOnClick(searchFragment);
+                    return true;
+                case R.id.nav_favourite:
+                    loadNavigationOnClick(favouriteFragment);
+                    return true;
+                case R.id.nav_account:
+                    loadNavigationOnClick(accountFragment);
+                    return true;
+            }
+            return false;
+        }
+    };
+
 
 }

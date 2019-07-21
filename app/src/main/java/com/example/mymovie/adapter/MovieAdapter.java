@@ -1,9 +1,7 @@
 package com.example.mymovie.adapter;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.mymovie.R;
 import com.example.mymovie.activity.MovieDetailActivity;
-import com.example.mymovie.model.Movie;
 import com.example.mymovie.model.MovieResponse;
 
 import java.util.List;
@@ -47,7 +42,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
                 .load(mData.get(position).getPoster_path())
                 .placeholder(R.drawable.ic_account_circle_black_24dp)
                 .into(holder.image);
-//        holder.image.setImageResource(mData.get(position).getBackdrop_path());
     }
 
     @Override
@@ -79,7 +73,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
                         intent.putExtra("title",mData.get(pos).getOriginal_title());
                         intent.putExtra("poster_path",mData.get(pos).getPoster_path());
                         intent.putExtra("overview",mData.get(pos).getOverview());
-                        intent.putExtra("vote_average",mData.get(pos).getVote_average());
+                        intent.putExtra("backdrop_path",mData.get(pos).getBackdrop_path());
                         context.startActivity(intent);
                     }
                 }

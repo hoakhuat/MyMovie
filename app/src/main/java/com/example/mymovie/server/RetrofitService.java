@@ -26,4 +26,7 @@ public interface RetrofitService {
     @GET("movie/top_rated")
     Call<MoviesResponse> getTopRatedMovies(@Query("api_key") String api_key);
 
+    @GET("movie/upcoming")
+    Call<MoviesResponse> getUpComingMovies(@Query("api_key") String api_key);
+
 }

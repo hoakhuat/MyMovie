@@ -1,46 +1,28 @@
 package com.example.mymovie.fragment;
 
-import android.app.ActivityOptions;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.mymovie.BuildConfig;
-import com.example.mymovie.activity.MovieDetailActivity;
 import com.example.mymovie.R;
 import com.example.mymovie.adapter.MovieAdapter;
-import com.example.mymovie.adapter.MovieItemClickListener;
 import com.example.mymovie.adapter.SliderPagerAdapter;
-import com.example.mymovie.client.RetrofitClient;
-import com.example.mymovie.model.Movie;
 import com.example.mymovie.model.MovieResponse;
 import com.example.mymovie.model.MoviesResponse;
-import com.example.mymovie.model.Slide;
 import com.example.mymovie.server.RetrofitService;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,18 +34,17 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-
-public class HomeFragement extends Fragment{
-    private List<Slide> slides;
+public class HomeFragement extends Fragment {
+    private List<MovieResponse> slide_movies;
     private ViewPager slider;
     private TabLayout indicator;
     private View view;
     private RecyclerView recyclerViewMovie;
-    private RetrofitService retrofitService;
-    ProgressDialog pd;
-    private SwipeRefreshLayout swipeContainer;
-    private MovieAdapter adapter;
-    private List<MovieResponse> movieList;
+    private RecyclerView recyclerViewMovie2;
+    private String api_key = "dd104acf25822bb6442481f4cde05a64";
+    private List<MovieResponse> popular;
+    private List<MovieResponse> top_rate;
+    private RetrofitService api;
 
     @Nullable
     @Override
@@ -74,56 +55,100 @@ public class HomeFragement extends Fragment{
         slider = view.findViewById(R.id.viewPager);
         indicator = view.findViewById(R.id.indicator);
         recyclerViewMovie = view.findViewById(R.id.rv_movie);
-//        RetrofitClient client = new RetrofitClient();
-//        retrofitService = client.getClient().create(RetrofitService.class);
+        top_rate = new ArrayList<>();
+        popular = new ArrayList<>();
+        slide_movies = new ArrayList<>();
 
-
-        //load image to slider
-        slides = new ArrayList<>();
-        slides.add(new Slide(R.drawable.slide1, "Slide Title \nmore text here"));
-        slides.add(new Slide(R.drawable.slide2, "Slide Title \nmore text here"));
-        slides.add(new Slide(R.drawable.slide1, "Slide Title \nmore text here"));
-        slides.add(new Slide(R.drawable.slide2, "Slide Title \nmore text here"));
-
-        SliderPagerAdapter adapter = new SliderPagerAdapter(getActivity(), slides);
-        slider.setAdapter(adapter);
-
-        // setup timer
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new HomeFragement.SliderTimer(),1000,6000);
-        indicator.setupWithViewPager(slider,true);
-
-        // Recyclerview Setup
         //set up for get api
         Retrofit get_retrofit = new Retrofit.Builder()
                 .baseUrl(RetrofitService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        RetrofitService api = get_retrofit.create(RetrofitService.class);
-        Call<MoviesResponse> call = api.getPopularMovies("dd104acf25822bb6442481f4cde05a64");
+        api = get_retrofit.create(RetrofitService.class);
+
+        // setup timer
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new HomeFragement.SliderTimer(), 1000, 6000);
+        indicator.setupWithViewPager(slider, true);
+
+        loadRecyclerView();
+        loadToSlider();
+
+        return view;
+    }
+
+    //load slide from api
+    private void loadToSlider(){
+        Call<MoviesResponse> call = api.getUpComingMovies(api_key);
         call.enqueue(new Callback<MoviesResponse>() {
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 List<MovieResponse> movies = response.body().getResults();
-                List<MovieResponse> list = new ArrayList<>();
-                for(int i=0;i<8;i++){
-                    list.add(movies.get(i));
+                for (int i = 0; i < 4; i++) {
+                    slide_movies.add(movies.get(i));
                 }
-                MovieAdapter movieAdapter = new MovieAdapter(getContext(),list);
-                recyclerViewMovie.setAdapter(movieAdapter);
-                recyclerViewMovie.smoothScrollToPosition(0);
-                recyclerViewMovie.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+                SliderPagerAdapter adapter = new SliderPagerAdapter(getActivity(), slide_movies);
+                slider.setAdapter(adapter);
             }
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
                 Log.d("Error", t.getMessage());
-                Toast.makeText(getContext(),"Error",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG).show();
             }
         });
 
-        return view;
+    }
+
+    //load data from api
+    private void loadRecyclerView() {
+
+        Call<MoviesResponse> call = api.getPopularMovies(api_key);
+        call.enqueue(new Callback<MoviesResponse>() {
+            @Override
+            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                List<MovieResponse> movies = response.body().getResults();
+                for (int i = 0; i < 8; i++) {
+                    popular.add(movies.get(i));
+                }
+                fillRecyclerView(recyclerViewMovie, popular);
+            }
+
+            @Override
+            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                Log.d("Error", t.getMessage());
+                Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        recyclerViewMovie2 = view.findViewById(R.id.rv_movie2);
+        Call<MoviesResponse> call2 = api.getTopRatedMovies(api_key);
+        call2.enqueue(new Callback<MoviesResponse>() {
+            @Override
+            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                List<MovieResponse> movies = response.body().getResults();
+
+                for (int i = 0; i < 8; i++) {
+                    top_rate.add(movies.get(i));
+                }
+                fillRecyclerView(recyclerViewMovie2, top_rate);
+            }
+
+            @Override
+            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                Log.d("Error", t.getMessage());
+                Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void fillRecyclerView(RecyclerView recyclerView, List<MovieResponse> list) {
+        MovieAdapter movieAdapter = new MovieAdapter(getContext(), list);
+        recyclerView.setAdapter(movieAdapter);
+        recyclerView.smoothScrollToPosition(0);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
     }
 
 
@@ -134,7 +159,7 @@ public class HomeFragement extends Fragment{
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (slider.getCurrentItem() < slides.size() - 1) {
+                        if (slider.getCurrentItem() < slide_movies.size() - 1) {
                             slider.setCurrentItem(slider.getCurrentItem() + 1);
                         } else
                             slider.setCurrentItem(0);

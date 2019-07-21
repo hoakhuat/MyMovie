@@ -10,22 +10,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
 import com.example.mymovie.R;
-import com.example.mymovie.model.Slide;
+import com.example.mymovie.model.MovieResponse;
 
 import java.util.List;
 
 public class SliderPagerAdapter extends PagerAdapter {
 
     private Context mContext ;
-    private List<Slide> mList ;
+    private List<MovieResponse> mList ;
 
 
-    public SliderPagerAdapter(Context mContext, List<Slide> mList) {
+    public SliderPagerAdapter(Context mContext, List<MovieResponse> mList) {
         this.mContext = mContext;
         this.mList = mList;
     }
-
 
     @Override
     public int getCount() {
@@ -45,9 +45,12 @@ public class SliderPagerAdapter extends PagerAdapter {
 
         ImageView slideImg = slideLayout.findViewById(R.id.slide_img);
         TextView slideText = slideLayout.findViewById(R.id.slide_title);
-        slideImg.setImageResource(mList.get(position).getImage());
-        slideText.setText(mList.get(position).getTitle());
-
+//        slideImg.setImageResource(mList.get(position).getImage());
+        slideText.setText(mList.get(position).getOriginal_title());
+        Glide.with(mContext)
+                .load(mList.get(position).getBackdrop_path())
+                .placeholder(R.drawable.ic_account_circle_black_24dp)
+                .into(slideImg);
         container.addView(slideLayout);
         return slideLayout;
     }
