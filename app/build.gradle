@@ -36,5 +36,7 @@ dependencies {
     implementation 'com.github.ivbaranov:materialfavoritebutton:0.1.5'
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.3'
     implementation 'com.github.mancj:MaterialSearchBar:0.8.2'
+    implementation 'com.facebook.android:facebook-login:[5,6)'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 
 }

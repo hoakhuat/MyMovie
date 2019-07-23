@@ -5,13 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
+    android:orientation="vertical"
     tools:context=".activity.VideoPlayerActivity">
 
     <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
         android:id="@+id/youtube_player_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:showYouTubeButton="false"
-        app:showFullScreenButton="true" />
+        android:layout_height="wrap_content"
+        app:showFullScreenButton="true"
+        app:showYouTubeButton="false" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:text="More"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_trailer_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:scrollbars="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </LinearLayout>

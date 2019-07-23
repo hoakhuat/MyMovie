@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.mymovie.R;
@@ -75,31 +76,6 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         loadCast();
 
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//
-//        favoriteButton.setOnFavoriteChangeListener(new MaterialFavoriteButton.OnFavoriteChangeListener() {
-//            @Override
-//            public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorite) {
-//                if (favorite){
-//                    SharedPreferences.Editor editor = getSharedPreferences("com.example.mymovie.activity.MovieDetailActivity", MODE_PRIVATE).edit();
-//                    editor.putBoolean("Favorite Added", true);
-//                    editor.commit();
-//                    saveFavorite();
-//                    Snackbar.make(buttonView, "Added to Favorite",
-//                            Snackbar.LENGTH_SHORT).show();
-//                }else{
-//                    int movie_id = getIntent().getExtras().getInt("id");
-//                    favoriteDbHelper = new FavoriteDbHelper(MovieDetailActivity.this);
-//                    favoriteDbHelper.deleteFavorite(movie_id);
-//
-//                    SharedPreferences.Editor editor = getSharedPreferences("com.example.mymovie.activity.MovieDetailActivity", MODE_PRIVATE).edit();
-//                    editor.putBoolean("Favorite Removed", true);
-//                    editor.commit();
-//                    Snackbar.make(buttonView, "Removed from Favorite",
-//                            Snackbar.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
 
     }
 
@@ -150,10 +126,15 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
                 List<Trailer> trailer = response.body().getResults();
-                Intent intent = new Intent(MovieDetailActivity.this,VideoPlayerActivity.class);
-                intent.putExtra("movie_id",trailer.get(0).getKey());
-                intent.putExtra("title",movieTitle);
-                startActivity(intent);
+                if(trailer.size()>0) {
+                    Intent intent = new Intent(MovieDetailActivity.this, VideoPlayerActivity.class);
+                    intent.putExtra("movie_id", movie_id);
+                    intent.putExtra("video_id", trailer.get(0).getKey());
+                    intent.putExtra("title", movieTitle);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(MovieDetailActivity.this, "Comming soon", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
@@ -186,16 +167,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     private void fillRecyclerView(RecyclerView recyclerView, List<Cast> list) {
         CastAdapter castAdapter = new CastAdapter(this, list);
         recyclerView.setAdapter(castAdapter);
-        recyclerView.smoothScrollToPosition(0);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
-//    public void saveFavorite(){
-//        favoriteDbHelper = new FavoriteDbHelper(MovieDetailActivity.this);
-//        favorite = new MovieResponse();
-//        favorite.setId(movie_id);
-//        favorite.setOriginal_title(movieTitle);
-//        favorite.setPoster_path(poster_path);
-//        favoriteDbHelper.addFavorite(favorite);
-//    }
+
 }

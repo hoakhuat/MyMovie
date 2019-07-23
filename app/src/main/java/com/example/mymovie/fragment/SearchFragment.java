@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymovie.R;
@@ -47,6 +46,7 @@ public class SearchFragment extends Fragment implements MaterialSearchBar.OnSear
         recyclerView = view.findViewById(R.id.rv_search);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
+
         //set up for get api
         Retrofit get_retrofit = new Retrofit.Builder()
                 .baseUrl(RetrofitService.BASE_URL)
@@ -75,7 +75,6 @@ public class SearchFragment extends Fragment implements MaterialSearchBar.OnSear
                             List<MovieResponse> list = response.body().getResults();
                             MovieAdapter movieAdapter = new MovieAdapter(getContext(), list);
                             recyclerView.setAdapter(movieAdapter);
-//                            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
                         }
 
                         @Override

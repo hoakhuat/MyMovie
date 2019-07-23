@@ -146,7 +146,6 @@ public class HomeFragement extends Fragment {
     private void fillRecyclerView(RecyclerView recyclerView, List<MovieResponse> list) {
         MovieAdapter movieAdapter = new MovieAdapter(getContext(), list);
         recyclerView.setAdapter(movieAdapter);
-        recyclerView.smoothScrollToPosition(0);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
     }

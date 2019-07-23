@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -23,10 +24,17 @@ public class MainActivity extends AppCompatActivity {
     private Fragment accountFragment;
     private Fragment activeFragment;
 
+    private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        if(username==null){
+//            Intent intent = new Intent(this,LoginActivity.class);
+//            startActivity(intent);
+//        }
 
         //find
         navigationView = findViewById(R.id.nav_bottom);
