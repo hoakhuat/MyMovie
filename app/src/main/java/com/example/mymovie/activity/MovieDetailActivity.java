@@ -130,7 +130,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                     Intent intent = new Intent(MovieDetailActivity.this, VideoPlayerActivity.class);
                     intent.putExtra("movie_id", movie_id);
                     intent.putExtra("video_id", trailer.get(0).getKey());
-                    intent.putExtra("title", movieTitle);
+//                    intent.putExtra("title", movieTitle);
                     startActivity(intent);
                 }else {
                     Toast.makeText(MovieDetailActivity.this, "Comming soon", Toast.LENGTH_LONG).show();

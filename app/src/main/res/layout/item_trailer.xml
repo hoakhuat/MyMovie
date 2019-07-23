@@ -10,23 +10,23 @@
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
-        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-        android:id="@+id/youtube_trailer"
-        app:showSeekBar="false"
-        app:showFullScreenButton="false"
-        app:showYouTubeButton="false"
-        app:showVideoDuration="false"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <!--<com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView-->
+        <!--android:id="@+id/youtube_trailer"-->
+        <!--app:showSeekBar="false"-->
+        <!--app:showFullScreenButton="false"-->
+        <!--app:showYouTubeButton="false"-->
+        <!--app:showVideoDuration="false"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
 
-        <!--<ImageView-->
-            <!--android:id="@+id/youtube_trailer"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:layout_marginBottom="10dp" />-->
+        <com.codewaves.youtubethumbnailview.ThumbnailView
+            android:id="@+id/youtube_trailer"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"/>
     </RelativeLayout>
 
 
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:textAllCaps="true"
-            android:textColor="#FFEB3B"
+            android:textColor="#FFFFFF"
             android:textSize="16sp" />
     </RelativeLayout>
 

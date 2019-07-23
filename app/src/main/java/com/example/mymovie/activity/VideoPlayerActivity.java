@@ -20,6 +20,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,7 +45,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         movie_id = intent.getExtras().getInt("movie_id");
         video_id = intent.getExtras().getString("video_id");
-        String title = intent.getExtras().getString("title");
+//        String title = intent.getExtras().getString("title");
         //set name for action bar
 //        getSupportActionBar().setTitle(title);
         recyclerView = findViewById(R.id.rv_trailer_more);
@@ -96,9 +97,17 @@ public class VideoPlayerActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
                 List<Trailer> trailers = response.body().getResults();
-                trailers.remove(trailers.get(0));
+
+                List<Trailer> remove = new ArrayList<>();
+               for(Trailer trailer:trailers){
+
+                   if(!trailer.getKey().equals(video_id)){
+                       remove.add(trailer);
+                   }
+               }
+
                 if (trailers.size() > 0) {
-                    TrailerAdapter adapter = new TrailerAdapter(VideoPlayerActivity.this, trailers);
+                    TrailerAdapter adapter = new TrailerAdapter(VideoPlayerActivity.this, remove, movie_id);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new GridLayoutManager(VideoPlayerActivity.this, 1));
                 }
