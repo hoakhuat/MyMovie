@@ -41,31 +41,31 @@ public class LoginFacebookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_facebook);
 
-//        loginButton = findViewById(R.id.login_button);
-//        txtName = findViewById(R.id.profile_name);
-//        txtEmail = findViewById(R.id.profile_email);
-//        circleImageView = findViewById(R.id.profile_pic);
-//
-//        callbackManager = CallbackManager.Factory.create();
-//        loginButton.setReadPermissions(Arrays.asList("email","public_profile"));
-//        checkLoginStatus();
-//
-//        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-//            @Override
-//            public void onSuccess(LoginResult loginResult) {
-//
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//
-//            }
-//
-//            @Override
-//            public void onError(FacebookException error) {
-//
-//            }
-//        });
+        loginButton = findViewById(R.id.login_button);
+        txtName = findViewById(R.id.profile_name);
+        txtEmail = findViewById(R.id.profile_email);
+        circleImageView = findViewById(R.id.profile_pic);
+
+        callbackManager = CallbackManager.Factory.create();
+        loginButton.setReadPermissions(Arrays.asList("email","public_profile"));
+        checkLoginStatus();
+
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
 
     }
 
@@ -92,36 +92,36 @@ public class LoginFacebookActivity extends AppCompatActivity {
 
     private void loadUserProfile(AccessToken newAccessToken)
     {
-//        GraphRequest request = GraphRequest.newMeRequest(newAccessToken, new GraphRequest.GraphJSONObjectCallback() {
-//            @Override
-//            public void onCompleted(JSONObject object, GraphResponse response)
-//            {
-//                try {
-//                    String first_name = object.getString("first_name");
-//                    String last_name = object.getString("last_name");
-//                    String email = object.getString("email");
-//                    String id = object.getString("id");
-//                    String image_url = "https://graph.facebook.com/"+id+ "/picture?type=normal";
-//
-//                    txtEmail.setText(email);
-//                    txtName.setText(first_name +" "+last_name);
-//                    RequestOptions requestOptions = new RequestOptions();
-//                    requestOptions.dontAnimate();
-//
-//                    Glide.with(LoginFacebookActivity.this).load(image_url).into(circleImageView);
-//
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        });
-//
-//        Bundle parameters = new Bundle();
-//        parameters.putString("fields","first_name,last_name,email,id");
-//        request.setParameters(parameters);
-//        request.executeAsync();
+        GraphRequest request = GraphRequest.newMeRequest(newAccessToken, new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response)
+            {
+                try {
+                    String first_name = object.getString("first_name");
+                    String last_name = object.getString("last_name");
+                    String email = object.getString("email");
+                    String id = object.getString("id");
+                    String image_url = "https://graph.facebook.com/"+id+ "/picture?type=normal";
+
+                    txtEmail.setText(email);
+                    txtName.setText(first_name +" "+last_name);
+                    RequestOptions requestOptions = new RequestOptions();
+                    requestOptions.dontAnimate();
+
+                    Glide.with(LoginFacebookActivity.this).load(image_url).into(circleImageView);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        Bundle parameters = new Bundle();
+        parameters.putString("fields","first_name,last_name,email,id");
+        request.setParameters(parameters);
+        request.executeAsync();
 
     }
 

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -12,7 +13,10 @@ import com.example.mymovie.R;
 import com.example.mymovie.fragment.FavouriteFragment;
 import com.example.mymovie.fragment.HomeFragement;
 import com.example.mymovie.fragment.SearchFragment;
+import com.example.mymovie.sqlite.MyHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,8 +28,10 @@ public class MainActivity extends AppCompatActivity {
     private Fragment accountFragment;
     private Fragment activeFragment;
 
-    private String username;
-
+    private  String username;
+    private List<Integer> favorites;
+    MyHelper myHelper;
+    SQLiteDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 //            Intent intent = new Intent(this,LoginActivity.class);
 //            startActivity(intent);
 //        }
+//        createDB();
 
         //find
         navigationView = findViewById(R.id.nav_bottom);
@@ -46,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         accountFragment = new FavouriteFragment();
         activeFragment = homeFragment;
 
-        addFragment(accountFragment,"4");
-        addFragment(favouriteFragment,"3");
+        addFragment(accountFragment,"3");
+//        addFragment(favouriteFragment,"3");
         addFragment(searchFragment,"2");
 
         getSupportFragmentManager()
@@ -88,9 +95,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_search:
                     loadNavigationOnClick(searchFragment);
                     return true;
-                case R.id.nav_favourite:
-                    loadNavigationOnClick(favouriteFragment);
-                    return true;
+//                case R.id.nav_favourite:
+//                    favouriteFragment = new FavouriteFragment();
+//                    loadNavigationOnClick(favouriteFragment);
+//                    return true;
                 case R.id.nav_account:
                     loadNavigationOnClick(accountFragment);
                     return true;
@@ -99,5 +107,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+//    public void createDB(){
+//        myHelper = new MyHelper(this, "favorite.db");
+//    }
 
 }

@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -17,19 +19,14 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.mymovie.R;
 import com.example.mymovie.adapter.CastAdapter;
-import com.example.mymovie.adapter.MovieAdapter;
-import com.example.mymovie.data.FavoriteDbHelper;
-import com.example.mymovie.model.MovieResponse;
-import com.example.mymovie.model.MoviesResponse;
 import com.example.mymovie.model.movie_cast.Cast;
 import com.example.mymovie.model.movie_cast.CastAndCrew;
 import com.example.mymovie.model.trailer.Trailer;
 import com.example.mymovie.model.trailer.TrailerResponse;
 import com.example.mymovie.server.RetrofitService;
+import com.example.mymovie.sqlite.MyHelper;
 import com.github.ivbaranov.mfb.MaterialFavoriteButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,19 +47,29 @@ public class MovieDetailActivity extends AppCompatActivity {
     private int movie_id;
     private String movieTitle;
     private MaterialFavoriteButton favoriteButton;
-    private MovieResponse favorite;
-    private MovieResponse movie;
-    private FavoriteDbHelper favoriteDbHelper;
     private String poster_path;
     private String overview;
+    private  String username;
+    private List<Integer> favorites;
+    private static Context context;
+
+    MyHelper myHelper;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+
+        context = getApplicationContext();
+
         play_fab = findViewById(R.id.play_fab);
         recyclerViewCast = findViewById(R.id.rv_cast);
         favoriteButton = findViewById(R.id.favorite_button);
+
+        username = "hoakhuat";
+
+
 
         //set up for get api
         Retrofit get_retrofit = new Retrofit.Builder()
@@ -76,7 +83,9 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         loadCast();
 
+        loadFavorite();
 
+        clickFavoriteButton();
     }
 
     private void iniview() {
@@ -171,4 +180,71 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
 
+    private void clickFavoriteButton(){
+        favoriteButton.setOnFavoriteChangeListener(new MaterialFavoriteButton.OnFavoriteChangeListener() {
+            @Override
+            public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorite) {
+                if(favorite){
+                    addToFavorite();
+//                    loadFavorite();
+//                    Log.d("size", favorites.size()+"");
+                }else {
+                    deleteFromFavorite();
+                }
+            }
+        });
+    }
+
+
+    private void loadFavorite(){
+        //get database
+        myHelper = new MyHelper(this, "favorite.db");
+        favorites = new ArrayList<>();
+        try {
+            db = myHelper.getReadableDatabase();
+            String select = "SELECT * FROM Favorite WHERE username = '"+username+"'";
+            Cursor cursor = db.rawQuery(select, null);
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndex("movieId"));
+                favorites.add(id);
+            }
+
+            for (int id : favorites) {
+                if (id == movie_id) {
+                    favoriteButton.setFavorite(true);
+                }
+            }
+        }catch (Exception e){
+            Log.d("Error", e.getMessage());
+        }
+    }
+
+    private void addToFavorite(){
+        db = myHelper.getWritableDatabase();
+        try {
+            String insert = "INSERT INTO Favorite(username, movieId) VALUES(?,?)";
+            db.execSQL(insert, new Object[]{username, movie_id});
+            favorites.add(movie_id);
+
+        }catch (Exception e){
+            Log.d("Error", e.getMessage());
+        }
+
+    }
+
+    private void deleteFromFavorite(){
+        db = myHelper.getWritableDatabase();
+        try{
+            String delete = "DELETE FROM Favorite WHERE username = ? and movieId = ?";
+            db.execSQL(delete, new Object[]{username, movie_id});
+            favorites.remove(movie_id);
+        }catch (Exception e){
+            Log.d("Error", e.getMessage());
+        }
+
+    }
+
+    public static Context getContext(){
+        return context;
+    };
 }

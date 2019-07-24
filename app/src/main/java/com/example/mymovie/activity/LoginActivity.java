@@ -17,7 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginFB(View v){
-//        Intent intent = new Intent(this, LoginFacebookActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, LoginFacebookActivity.class);
+        startActivity(intent);
     }
 }
